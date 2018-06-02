@@ -1,29 +1,31 @@
-import timeit
-import numpy as np
-import scipy.optimize as optimize
-
+import scipy.optimize
+import math
 import time
-
-def f(x): 
-    return np.cos(x)/(1.+x**2)
-
-def fprime(x):
-    return (-(x**2+1.)*np.sin(x)-2.*x*np.cos(x))/(x**2+1)**2
+def f(x):
+    return math.cos(x)/(1+x**2)
+def derivative(x):
+    return (-math.sin(x)/(1+x**2))-((math.cos(x)*2*x)/(1+x**2)**2)
 
 
-start_time = time.time()
-brentq_x = optimize.brentq(f, 0.1, 2.4)
-print("--- %s seconds ---" % (time.time() - start_time))
+print (scipy.optimize.bisect(f,0.1,2.4))
+start_time=time.time()
+for i in range(10000):
+    scipy.optimize.bisect(f,0.1,2.4)
+print ('execution time',time.time()-start_time)
 
-bisect_x = optimize.bisect(f, 0.1, 2.4)
-newton_x = optimize.newton(f, 0.1)
-newtonx2_x = optimize.newton(f, 0.1, fprime)
+start_time=time.time()
+for i in range(10000):
+    scipy.optimize.newton(f,1.57,fprime=derivative)
+print ('execution time',time.time()-start_time)
 
-bisect_time = optimize.bisect (f, 0.1, 2.4)
-print("bisect", bisect_time)
-brentq_time = optimize.brentq (f, 0.1, 2.4)
-print("brentq", brentq_time)
-newton_time = optimize.newton (f, 0.1)
-print("newton", newton_time)
-newtonx2_time = optimize.newton (f, 0.1, fprime)
-print("newtonx2", newtonx2_time)
+start_time=time.time()
+for i in range(10000):
+    scipy.optimize.newton(f,1.57,fprime=None)
+print ('execution time',time.time()-start_time)
+
+
+start_time=time.time()
+for i in range(10000):
+    scipy.optimize.brentq(f,0.1,2.4)
+print ('execution time',time.time()-start_time)
+
